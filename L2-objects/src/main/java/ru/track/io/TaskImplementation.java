@@ -44,7 +44,10 @@ public final class TaskImplementation implements FileEncoder {
 
         int rem = picBytes.length % 3;
         for (int i = 0; i < picBytes.length - rem; i += 3) {
-            String[] threeBytes = {byteToString(picBytes[i]), byteToString(picBytes[i + 1]), byteToString(picBytes[i + 2])};
+            String[] threeBytes = {
+                    byteToString(picBytes[i]),
+                    byteToString(picBytes[i + 1]),
+                    byteToString(picBytes[i + 2])};
             result.add(base64ForByteStringList(threeBytes, 3));
         }
 
@@ -59,7 +62,7 @@ public final class TaskImplementation implements FileEncoder {
                     byteToString(picBytes[picBytes.length - 1]),
                     ZERO_BYTE,
                     ZERO_BYTE};
-                result.add(base64ForByteStringList(threeBytes, 1) + "==");
+            result.add(base64ForByteStringList(threeBytes, 1) + "==");
         }
 
         FileWriter fw = new FileWriter(fout);
@@ -73,8 +76,8 @@ public final class TaskImplementation implements FileEncoder {
     }
 
 
-    private String byteToString(byte b) {
-        return String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
+    private String byteToString(byte currentByte) {
+        return String.format("%8s", Integer.toBinaryString(currentByte & 0xFF)).replace(' ', '0');
     }
 
     public String base64ForByteStringList(String[] bytes, int lenBytes) {
