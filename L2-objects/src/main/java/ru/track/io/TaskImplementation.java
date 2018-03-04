@@ -48,22 +48,18 @@ public final class TaskImplementation implements FileEncoder {
             result.add(base64ForByteStringList(threeBytes, 3));
         }
 
-        if (rem == 1 && picBytes.length > 1) {
+        if (rem == 2) {
             String[] threeBytes = {
                     byteToString(picBytes[picBytes.length - 2]),
                     byteToString(picBytes[picBytes.length - 1]),
                     ZERO_BYTE};
             result.add(base64ForByteStringList(threeBytes, 2) + "=");
-        } else if (rem == 2 || (rem == 1 && picBytes.length < 2)) {
+        } else if (rem == 1) {
             String[] threeBytes = {
                     byteToString(picBytes[picBytes.length - 1]),
                     ZERO_BYTE,
                     ZERO_BYTE};
-            if (rem == 1 && picBytes.length < 2) {
-                result.add(base64ForByteStringList(threeBytes, 2) + "=");
-            } else {
                 result.add(base64ForByteStringList(threeBytes, 1) + "==");
-            }
         }
 
         FileWriter fw = new FileWriter(fout);
