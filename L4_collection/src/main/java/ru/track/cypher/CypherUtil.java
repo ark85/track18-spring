@@ -1,7 +1,12 @@
 package ru.track.cypher;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,7 +24,15 @@ public class CypherUtil {
      */
     @NotNull
     public static Map<Character, Character> generateCypher() {
-        return null;
+        List<Character> shuffledSymbols = new ArrayList();
+        Collections.addAll(shuffledSymbols, ArrayUtils.toObject(SYMBOLS.toCharArray()));
+        List<Character> symbols = new ArrayList(shuffledSymbols);
+        Collections.shuffle(shuffledSymbols);
+        Map<Character, Character> cypher = new HashMap<>();
+        for (int i = 0; i < SYMBOLS.length(); i++) {
+            cypher.put(symbols.get(i), shuffledSymbols.get(i));
+        }
+        return cypher;
     }
 
 }

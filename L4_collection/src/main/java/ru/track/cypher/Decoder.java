@@ -1,7 +1,6 @@
 package ru.track.cypher;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +23,11 @@ public class Decoder {
 
         cypher = new LinkedHashMap<>();
 
-
+        Iterator<Map.Entry<Character, Integer>> domainIterator = domainHist.entrySet().iterator();
+        Iterator<Map.Entry<Character, Integer>> encriptedIterator = encryptedDomainHist.entrySet().iterator();
+        while (domainIterator.hasNext() && encriptedIterator.hasNext()) {
+            cypher.put(encriptedIterator.next().getKey(), domainIterator.next().getKey());
+        }
     }
 
     public Map<Character, Character> getCypher() {
@@ -39,7 +42,15 @@ public class Decoder {
      */
     @NotNull
     public String decode(@NotNull String encoded) {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        for (char ch: encoded.toCharArray()) {
+            if (isLetter(ch)) {
+                stringBuilder.append(cypher.get(ch));
+            } else {
+                stringBuilder.append(ch);
+            }
+        }
+        return stringBuilder.toString();
     }
 
     /**
@@ -52,8 +63,43 @@ public class Decoder {
      * Мапа отсортирована по частоте. При итерировании на первой позиции наиболее частая буква
      */
     @NotNull
-    Map<Character, Integer> createHist(@NotNull String text) {
-        return null;
+    static Map<Character, Integer> createHist(@NotNull String text) {
+        Map<Character, Integer> histMap = new HashMap<>();
+        for (Character ch: text.toCharArray()) {
+            if (isLetter(ch)) {
+                Character lowChar = Character.toLowerCase(ch);
+                Integer count = histMap.get(lowChar);
+                if (count == null) {
+                    histMap.put(lowChar, 1);
+                } else {
+                    histMap.put(lowChar, count + 1);
+                }
+            }
+        }
+
+        List<Map.Entry<Character, Integer>> entries = new ArrayList<>(histMap.entrySet());
+        Collections.sort(entries, new Comparator<Map.Entry<Character, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Character, Integer> characterIntegerEntry, Map.Entry<Character, Integer> t1) {
+                return t1.getValue() - characterIntegerEntry.getValue();
+            }
+        });
+
+        Map<Character, Integer> sortedHistMap = new LinkedHashMap<>();
+        for (Map.Entry<Character, Integer> entry: entries) {
+            sortedHistMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedHistMap;
     }
+
+    static boolean isLetter(char ch) {
+        if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 }
