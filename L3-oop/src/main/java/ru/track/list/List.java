@@ -1,5 +1,7 @@
 package ru.track.list;
 
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+
 import java.util.NoSuchElementException;
 
 /**
@@ -10,6 +12,8 @@ import java.util.NoSuchElementException;
  * Сейчас все методы помечены как abstract - эту метку можно убирать, если вы реализовываете его в этом классе
  */
 public abstract class List {
+
+    protected int size;
 
     /**
      * Добавить элемент в конец списка
@@ -35,7 +39,9 @@ public abstract class List {
     /**
      * Кол-во элементов списка
      */
-    abstract int size();
+    int size() {
+        return size;
+    }
 
 
 }

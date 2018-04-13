@@ -11,31 +11,54 @@ import java.util.NoSuchElementException;
  */
 public class MyArrayList extends List {
 
-    public MyArrayList() {
+    int[] mass;
 
+    public MyArrayList() {
+        mass = new int[10];
+        size = 0;
     }
 
     public MyArrayList(int capacity) {
-
+        mass = new int[capacity];
+        size = 0;
     }
 
     @Override
     void add(int item) {
-
+        if (size == mass.length) {
+            int[] newMass = new int[mass.length + 5];
+            System.arraycopy(mass, 0, newMass, 0, mass.length);
+            mass = newMass;
+            mass[size++] = item;
+        } else {
+            mass[size++] = item;
+        }
     }
 
     @Override
     int remove(int idx) throws NoSuchElementException {
-        return 0;
+        if (idx > size - 1 || idx < 0) {
+            throw new NoSuchElementException();
+        }
+        if (idx == size - 1) {
+            return mass[--size];
+        }
+
+        int value = mass[idx];
+
+        for (int i = idx; i < size - 1; i++) {
+            mass[i] = mass[i + 1];
+        }
+        size--;
+        return value;
     }
 
     @Override
     int get(int idx) throws NoSuchElementException {
-        return 0;
-    }
+        if (idx > size - 1 || idx < 0) {
+            throw new NoSuchElementException();
+        }
 
-    @Override
-    int size() {
-        return 0;
+        return mass[idx];
     }
 }
